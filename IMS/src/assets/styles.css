@@ -1,0 +1,87 @@
+@import './base.css';
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  margin: 0; /* Remove default body margin */
+  padding: 0; /* Remove default body padding */
+  height: 100%; /* Full height */
+  width: 100%; /* Full width */
+}
+
+h1, h2, h3, h4 {
+  color: #000000;
+  font-weight: 900;
+}
+
+button {
+  background-color: #007bff;
+  color: rgb(0, 0, 0); /* Changed to white for better contrast */
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin: 0px;
+  border-radius: 40px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#app {
+  height: 100%; /* Full height */
+  width: 100%; /* Full width */
+  display: flex; /* Use flexbox for layout */
+  flex-direction: row; /* Change to row for sidebar and content */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: #0056b3;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.food-item {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 4px;
+  background-color: white;
+  transition: box-shadow 0.3s;
+}
+
+.food-item:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.order-summary {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin-top: 20px;
+  background-color: #fff;
+  border-radius: 4px;
+}
+
+.main-content {
+  flex: 1; /* Take up remaining space */
+  padding: 20px; /* Padding around the content */
+  background-color: #ffffff; /* Background color for the main content */
+  display: flex;
+  flex-direction: column; /* Stack header and main content vertically */
+}
+
+.app-header {
+  margin-bottom: 20px; /* Space between header and content */
+}
