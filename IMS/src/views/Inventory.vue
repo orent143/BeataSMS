@@ -95,7 +95,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-left: 5px;
+  margin-left: 18px;
   width: 95%;
 }
 
@@ -132,6 +132,7 @@ export default {
   background-color: transparent; /* Transparent background */
   border: none; /* No border */
   cursor: pointer; /* Pointer cursor */
+  font-size: 19px;
   color: #333; /* Icon color */
   transition: color 0.3s; /* Smooth transition for hover */
 }
@@ -167,6 +168,7 @@ export default {
   color: rgb(0, 0, 0);
   border: none;
   border-radius: 10px;
+  width: 70px;
   cursor: pointer;
   font-size: 14px; /* Adjust font size */
   font-family: 'Arial', sans-serif; /* Change font family */
