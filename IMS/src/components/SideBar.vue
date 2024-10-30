@@ -1,8 +1,6 @@
 <template>
     <div :class="['sidebar', { 'collapsed': isCollapsed }]">
-    <button @click="toggleSidebar" class="toggle-btn">
-      <i :class="isCollapsed ? 'fas fa-angle-right' : 'fas fa-angle-left'"></i>
-    </button>
+   
     <h2 v-if="!isCollapsed" class="sidebar-title">
       <img 
         src="../assets/Cafe-Logo-Transparent-Background.png" 
@@ -46,11 +44,7 @@ export default {
       ]
     };
   },
-  methods: {
-    toggleSidebar() {
-      this.isCollapsed = !this.isCollapsed;
-    }
-  }
+  
 }
 </script>
 
@@ -59,12 +53,12 @@ export default {
 .sidebar {
   width: 200px; /* Default width */
   padding: 20px;
-  background-color: #940094;
+  background-color: #FF32BA;
   border-right: 1px solid #ccc;
   height: 100vh; /* Full height */
   position: fixed; /* Keep it fixed */
   transition: width 0.3s ease; /* Smooth transition */
-  box-shadow: 2px 0 10px rgba(216, 23, 255, 0.822); /* Elevation effect */
+  box-shadow: 2px 0 10px #FF00A9; /* Elevation effect */
 }
 
 .sidebar-logo {
@@ -108,7 +102,7 @@ margin-bottom: 30px; /* Adjust bottom margin */
 }
 
 .sidebar-link {
-  color: #b6b6b6; /* Link color */
+  color: #ffffff; /* Link color */
   text-decoration: none;
   font-weight: 0;
   font-size: 17px;

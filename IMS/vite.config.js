@@ -9,4 +9,7 @@ export default defineConfig({
       '@': '/src', // Make sure your path is correct
     },
   },
+  server: {
+    open: 'chrome', // Opens Chrome when starting the server
+  },
 });

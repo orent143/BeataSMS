@@ -1,25 +1,34 @@
 <template>
   <div class="app-container">
     <div class="header-container">
-      <h1 class="products-header">Products</h1>
+      <h1 class="products-header">Inventory List</h1>
       <div class="header-actions">
-        <input
-          type="text"
-          v-model="searchTerm"
-          placeholder="Search Products"
-          class="search-bar"
-        />
-        <button @click="toggleAddForm" class="add-product-btn">Add Product</button>
+        <div class="search-container">
+          <input
+            type="text"
+            v-model="searchTerm"
+            placeholder="Search"
+            class="search-bar"
+          />
+          <i class="fas fa-search search-icon"></i>
+        </div>
+        <button class="filter-btn" @click="filterItems">
+          <i class="fas fa-filter"></i>
+        </button>
+        <button @click="toggleAddForm" class="add-product-btn">Add</button>
       </div>
     </div>
-    <div class="inventory-container">
-      <AddItem v-if="showAddForm" @add="addItem" />
-      <InventoryList
-        :items="filteredItems"
-        @edit="setEditItem"
-        @remove="removeItem"
-      />
-      <EditItem v-if="editingItem" :item="editingItem" @save="saveItem" />
+
+    <div class="main-content">
+      <div class="inventory-container">
+        <AddItem v-if="showAddForm" @add="addItem" :isVisible="showAddForm" @close="toggleAddForm" />
+        <InventoryList
+          :items="filteredItems"
+          @edit="setEditItem"
+          @remove="removeItem"
+        />
+        <EditItem v-if="editingItem" :item="editingItem" @save="saveItem" />
+      </div>
     </div>
   </div>
 </template>
@@ -52,12 +61,12 @@ export default {
     }
   },
   methods: {
+    toggleAddForm() {
+      this.showAddForm = !this.showAddForm; // Toggle form visibility
+    },
     addItem(item) {
       this.$store.dispatch('addItem', item);
       this.showAddForm = false; // Hide the form after adding
-    },
-    toggleAddForm() {
-      this.showAddForm = !this.showAddForm; // Toggle form visibility
     },
     removeItem(itemId) {
       this.$store.dispatch('removeItem', itemId);
@@ -75,20 +84,19 @@ export default {
 
 <style scoped>
 .app-container {
-  margin-left: 30px; /* Remove left margin */
-  width: 100%; /* Set width to 100% */
-  max-width: 1200px; /* Set a maximum width */
   display: flex;
   flex-direction: column;
+  width: 1300px;
+  max-width: 1300px;
+  margin-left: 40px;
 }
 
 .header-container {
   display: flex;
-  align-items: center; /* Center vertically */
-  justify-content: space-between; /* Space between items */
-  margin-bottom: 15px; /* Space below the header */
-  width: 100%; /* Set width to 100% */
-  max-width: 1200px; /* Set a maximum width */
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 5px;
+  width: 95%;
 }
 
 .products-header {
@@ -100,45 +108,73 @@ export default {
 
 .header-actions {
   display: flex;
-  align-items: center; /* Align items vertically */
+  align-items: center;
+  gap: 10px; /* Add space between header actions */
 }
 
-.search-bar {
-  padding: 8px;
-  margin-right: 10px; /* Space between search bar and button */
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.add-product-btn {
-  padding: 8px 12px;
-  width: 121%;
-  background-color: #e414ff; /* Green background */
-  color: rgb(255, 255, 255);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.add-product-btn:hover {
-  background-color: #000000; /* Darker green on hover */
+.main-content {
+  display: flex; /* Use flexbox for layout */
+  padding: 4px; /* Padding around the main content */
 }
 
 .inventory-container {
   flex-grow: 1; /* Allow it to fill available space */
-  padding: 20px; /* Padding around the content */
-  width: 121%;
-  height: calc(100vh - 80px); /* Adjust height to full viewport height minus header and any other fixed height */
+  height: 630px; /* Adjust height */
   background-color: #dfdfdf; /* Background color */
   border-radius: 25px; /* Maintain border radius */
   overflow-y: auto; /* Enable scrolling if content overflows */
-}
-.sidebar {
-  width: 250px; /* Fixed width for sidebar */
-  background-color: #f0f0f0; /* Example sidebar color */
+  margin-left: 5px; /* Space between the sidebar and inventory container */
+  padding: 0; /* No padding */
 }
 
-.collapsed .inventory-container {
-  margin-left: 50px;
+.filter-btn {
+  padding: 8px; /* Adjust padding */
+  background-color: transparent; /* Transparent background */
+  border: none; /* No border */
+  cursor: pointer; /* Pointer cursor */
+  color: #333; /* Icon color */
+  transition: color 0.3s; /* Smooth transition for hover */
 }
-</style> 
+
+.search-container {
+  position: relative; /* Set position relative for the icon */
+  margin-right: 3px; /* Space between search and button */
+}
+
+.search-icon {
+  position: absolute; /* Position absolute to place it inside the input */
+  right: 10px; /* Position it on the right */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for vertical centering */
+  color: #333; /* Icon color */
+  pointer-events: none; /* Prevent clicks on the icon */
+}
+
+.search-bar {
+  padding: 8px 30px 8px 8px; /* Add right padding for icon space */
+  border: 1px solid #94949400;
+  border-radius: 10px;
+  width: 130px;
+  font-size: 14px; /* Adjust font size */
+  font-weight: bold; /* Adjust font weight */
+  color: #333; /* Change font color */
+  background-color: #D9D9D9; /* Change background color */
+}
+
+.add-product-btn {
+  padding: 8px 12px;
+  background-color: #01A501; /* Button background */
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px; /* Adjust font size */
+  font-family: 'Arial', sans-serif; /* Change font family */
+  font-weight: bold; /* Make font bold */
+  text-align: center; /* Center the text */
+}
+
+.add-product-btn:hover {
+  background-color: #00b32dad; /* Darker on hover */
+}
+</style>
