@@ -1,73 +1,42 @@
 <template>
-  <div class="app-container">
-    <div class="header-container">
-      <h1 class="products-header">Suppliers</h1>
-      <div class="header-actions">
-        <div class="search-container">
-          <input
-            type="text"
-            v-model="searchTerm"
-            placeholder="Search"
-            class="search-bar"
-          />
-          <i class="fas fa-search search-icon"></i>
-        </div>
-        <button @click="toggleAddForm" class="add-product-btn">Add</button>
-      </div>
-    </div>
-
-    <div class="main-content">
-      <div class="supplier-container">
+     <div class="app-container">
+      <div class="header-container">
+        <h1 class="products-header">Categories</h1>
+        <div class="header-actions">
+          <div class="search-container">
+            <input
+              type="text"
+              v-model="searchTerm"
+              placeholder="Search"
+              class="search-bar"
+            />
+            <i class="fas fa-search search-icon"></i>
+          </div>
         
-        <ul>
-          <li v-for="supplier in filteredSuppliers" :key="supplier.id">
-            {{ supplier.name }} - Contact: {{ supplier.contact }}
-            <button @click="editSupplier(supplier.id)">Edit</button>
-            <button @click="deleteSupplier(supplier.id)">Delete</button>
-          </li>
-        </ul>
+          <button @click="toggleAddForm" class="add-product-btn">Add</button>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="category-container">
+          <AddItem v-if="showAddForm" @add="addItem" :isVisible="showAddForm" @close="toggleAddForm" />
+          <InventoryList
+            :items="filteredItems"
+            @edit="setEditItem"
+            @remove="removeItem"
+          />
+          <EditItem v-if="editingItem" :item="editingItem" @save="saveItem" />
+        </div>
       </div>
     </div>
-  </div>
-</template>
+  </template>
+  
+  <script>
 
-<script>
-export default {
-  data() {
-    return {
-      suppliers: [
-        { id: 1, name: 'Supplier A', contact: 'contact@supplierA.com' },
-        { id: 2, name: 'Supplier B', contact: 'contact@supplierB.com' },
-        { id: 3, name: 'Supplier C', contact: 'contact@supplierC.com' }
-      ],
-      searchTerm: ''
-    };
-  },
-  computed: {
-    filteredSuppliers() {
-      return this.suppliers.filter(supplier =>
-        supplier.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
-  },
-  methods: {
-    deleteSupplier(supplierId) {
-      this.suppliers = this.suppliers.filter(supplier => supplier.id !== supplierId);
-    },
-    editSupplier(supplierId) {
-      // Logic to edit a supplier
-      console.log("Edit supplier:", supplierId);
-    },
-    toggleAddForm() {
-      // Logic to toggle the add supplier form
-      console.log("Toggle add supplier form");
-    }
-  }
-}
-</script>
-
-<style scoped>
-.app-container {
+  </script>
+  
+  <style scoped>
+ .app-container {
   display: flex;
   flex-direction: column;
   width: 1300px;
@@ -101,15 +70,17 @@ export default {
   padding: 4px; /* Padding around the main content */
 }
 
-.supplier-container {
+.category-container {
   flex-grow: 1; /* Allow it to fill available space */
   height: 630px; /* Adjust height */
   background-color: #dfdfdf; /* Background color */
   border-radius: 25px; /* Maintain border radius */
   overflow-y: auto; /* Enable scrolling if content overflows */
   margin-left: 5px; /* Space between the sidebar and inventory container */
-  padding: 10px; /* Padding for supplier container */
+  padding: 0; /* No padding */
 }
+
+
 
 .search-container {
   position: relative; /* Set position relative for the icon */

@@ -5,6 +5,7 @@ import Orders from '@/views/Orders.vue';
 import Suppliers from '@/views/Suppliers.vue';
 import Reports from '@/views/Reports.vue';
 import Users from '@/views/Users.vue';
+import Category from '@/views/Category.vue';
 
 const routes = [
   { path: '/', component: Home },
@@ -12,7 +13,8 @@ const routes = [
   { path: '/orders', component: Orders },
   { path: '/suppliers', component: Suppliers },
   { path: '/reports', component: Reports },
-  { path: '/users', component: Users }
+  { path: '/users', component: Users },
+  { path: '/category', component: Category }
 ];
 
 const router = createRouter({
