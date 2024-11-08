@@ -39,8 +39,8 @@
  .app-container {
   display: flex;
   flex-direction: column;
-  width: 1300px;
-  max-width: 1300px;
+  width: 80dvw;
+  max-width: 80dvw;
   margin-left: 40px;
 }
 

@@ -70,8 +70,8 @@ export default {
 .app-container {
   display: flex;
   flex-direction: column;
-  width: 1300px;
-  max-width: 1300px;
+  width: 80dvw;
+  max-width: 80dvw;
   margin-left: 40px;
 }
 
@@ -103,7 +103,7 @@ export default {
 
 .supplier-container {
   flex-grow: 1; /* Allow it to fill available space */
-  height: 630px; /* Adjust height */
+  height: 40dvw; /* Adjust height */
   background-color: #dfdfdf; /* Background color */
   border-radius: 25px; /* Maintain border radius */
   overflow-y: auto; /* Enable scrolling if content overflows */

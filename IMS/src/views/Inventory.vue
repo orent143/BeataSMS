@@ -12,9 +12,25 @@
           />
           <i class="fas fa-search search-icon"></i>
         </div>
-        <button class="filter-btn" @click="filterItems">
-          <i class="fas fa-filter"></i>
-        </button>
+        
+        <!-- Filter Button with dropdown for status -->
+        <div class="filter-container">
+          <button class="filter-btn" @click="toggleFilterDropdown">
+            <i class="fas fa-filter"></i>
+          </button>
+          <!-- Dropdown for status filter, shown when showFilterDropdown is true -->
+          <div v-if="showFilterDropdown" class="dropdown">
+            <!-- Status Filter Dropdown -->
+            <select v-model="selectedStatus" class="filter-select" @change="filterItems">
+              <option value="">All Statuses</option>
+              <option value="In Stock">In Stock</option>
+              <option value="Low Stock">Low Stock</option>
+              <option value="Out of Stock">Out of Stock</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Add Product Button -->
         <button @click="toggleAddForm" class="add-product-btn">Add</button>
       </div>
     </div>
@@ -33,6 +49,7 @@
   </div>
 </template>
 
+
 <script>
 import AddItem from '@/components/AddItem.vue';
 import InventoryList from '@/components/InventoryList.vue';
@@ -49,24 +66,25 @@ export default {
     return {
       editingItem: null,
       showAddForm: false,
-      searchTerm: ''
+      searchTerm: '',
+      selectedStatus: '',  // Track the selected status filter
+      showFilterDropdown: false,  // Toggle the visibility of the dropdown
+      filteredItemsList: []  // Store filtered items
     };
   },
   computed: {
     ...mapState(['items']),
     filteredItems() {
-      return this.items.filter(item =>
-        item.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
+      return this.filteredItemsList;
     }
   },
   methods: {
     toggleAddForm() {
-      this.showAddForm = !this.showAddForm; // Toggle form visibility
+      this.showAddForm = !this.showAddForm;
     },
     addItem(item) {
       this.$store.dispatch('addItem', item);
-      this.showAddForm = false; // Hide the form after adding
+      this.showAddForm = false;
     },
     removeItem(itemId) {
       this.$store.dispatch('removeItem', itemId);
@@ -77,17 +95,56 @@ export default {
     saveItem(updatedItem) {
       this.$store.dispatch('editItem', updatedItem);
       this.editingItem = null;
+    },
+    toggleFilterDropdown() {
+      this.showFilterDropdown = !this.showFilterDropdown;
+    },
+    filterItems() {
+      let filtered = this.items;
+
+      if (this.searchTerm) {
+        filtered = filtered.filter(item =>
+          item.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+        );
+      }
+
+      if (this.selectedStatus) {
+        filtered = filtered.filter(item => item.status === this.selectedStatus);
+      }
+
+      this.filteredItemsList = filtered;
+
+      // Close the dropdown after filtering
+      this.showFilterDropdown = false;
+    },
+
+    // Close the dropdown when clicking outside
+    closeFilterDropdown(event) {
+      const dropdown = this.$refs.filterDropdown;
+      if (dropdown && !dropdown.contains(event.target)) {
+        this.showFilterDropdown = false;
+      }
     }
+  },
+  created() {
+    this.filterItems();  // Filter the items initially
+    // Add event listener to close dropdown if clicked outside
+    document.addEventListener('click', this.closeFilterDropdown);
+  },
+  beforeDestroy() {
+    // Clean up event listener when the component is destroyed
+    document.removeEventListener('click', this.closeFilterDropdown);
   }
 }
 </script>
+
 
 <style scoped>
 .app-container {
   display: flex;
   flex-direction: column;
-  width: 1300px;
-  max-width: 1300px;
+  width: 80dvw;
+  max-width: 80dvw;
   margin-left: 40px;
 }
 
@@ -119,7 +176,7 @@ export default {
 
 .inventory-container {
   flex-grow: 1; /* Allow it to fill available space */
-  height: 630px; /* Adjust height */
+  height: 40dvw; /* Adjust height */
   background-color: #dfdfdf; /* Background color */
   border-radius: 25px; /* Maintain border radius */
   overflow-y: auto; /* Enable scrolling if content overflows */
@@ -135,6 +192,31 @@ export default {
   font-size: 19px;
   color: #333; /* Icon color */
   transition: color 0.3s; /* Smooth transition for hover */
+}
+
+.filter-container {
+  position: relative; /* Ensures the dropdown can be positioned inside */
+}
+
+.dropdown {
+  position: absolute;
+  top: 35px; /* Align the dropdown just below the button */
+  left: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 10;
+  width: 8dvw; /* Width for dropdown */
+}
+
+.filter-select {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .search-container {
@@ -177,6 +259,7 @@ export default {
 }
 
 .add-product-btn:hover {
-  background-color: #00b32dad; /* Darker on hover */
+  background-color: #00b32dad;
+ /* Darker on hover */
 }
 </style>
