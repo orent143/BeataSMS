@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="header-container">
-      <h1 class="products-header">Inventory List</h1>
+      <h1 class="products-header">Product List</h1>
       <div class="header-actions">
         <div class="search-container">
           <input

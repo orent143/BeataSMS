@@ -1,7 +1,7 @@
 <template>
   <div class="popout-form" v-if="isVisible">
     <div class="form-header">
-      <h2>Add Item</h2>
+      <h2>Add Product</h2>
       <button class="close-btn" @click="closeForm">x</button>
     </div>
     <form @submit.prevent="submit" class="form-container">
@@ -47,7 +47,7 @@
 
       <!-- Form Actions -->
       <div class="form-actions">
-        <button type="submit" class="add-item-btn">Add Item</button>
+        <button type="submit" class="add-item-btn">Add Product</button>
       </div>
     </form>
   </div>
@@ -177,7 +177,7 @@ select {
   justify-content: flex-end; /* Align the button to the right */
   width: 100%;
   margin-top: 20px;
-  margin-left: 40px;
+  margin-left: 50px;
 }
 
 .add-item-btn {
