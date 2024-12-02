@@ -13,7 +13,7 @@
       <li v-for="item in items" :key="item.id" class="list-item">
         <div class="item-name">{{ item.name }}</div>
         <div class="item-quantity">{{ item.quantity }}</div>
-        <div class="item-cost">{{ item.costPrice }}</div>
+        <div class="item-cost">{{ item.unitPrice }}</div>
         <div class="item-category">{{ item.category }}</div>
         <div class="item-supplier">{{ item.supplier }}</div>
         <div class="item-status">{{ item.status }}</div>

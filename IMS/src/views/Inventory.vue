@@ -12,7 +12,7 @@
           />
           <i class="fas fa-search search-icon"></i>
         </div>
-        
+
         <!-- Filter Button with dropdown for status -->
         <div class="filter-container">
           <button class="filter-btn" @click="toggleFilterDropdown">
@@ -37,23 +37,33 @@
 
     <div class="main-content">
       <div class="inventory-container">
+        <!-- AddItem Form -->
         <AddItem v-if="showAddForm" @add="addItem" :isVisible="showAddForm" @close="toggleAddForm" />
+
+        <!-- Inventory List -->
         <InventoryList
           :items="filteredItems"
-          @edit="setEditItem"
           @remove="removeItem"
+          @edit="toggleEditForm"
         />
-        <EditItem v-if="editingItem" :item="editingItem" @save="saveItem" />
+
+        <!-- EditItem Form -->
+        <EditItem
+          v-if="showEditForm"
+          :isVisible="showEditForm"
+          :itemToEdit="selectedItem"
+          @close="toggleEditForm"
+          @update="updateItem"
+        />
       </div>
     </div>
   </div>
 </template>
 
-
 <script>
 import AddItem from '@/components/AddItem.vue';
 import InventoryList from '@/components/InventoryList.vue';
-import EditItem from '@/components/EditItem.vue';
+import EditItem from '@/components/EditItem.vue'; // Import the EditItem component
 import { mapState } from 'vuex';
 
 export default {
@@ -64,12 +74,13 @@ export default {
   },
   data() {
     return {
-      editingItem: null,
-      showAddForm: false,
       searchTerm: '',
-      selectedStatus: '',  // Track the selected status filter
-      showFilterDropdown: false,  // Toggle the visibility of the dropdown
-      filteredItemsList: []  // Store filtered items
+      selectedStatus: '',
+      showFilterDropdown: false,
+      showAddForm: false,
+      showEditForm: false,
+      selectedItem: null, // Store the item to be edited
+      filteredItemsList: [] // Store filtered items
     };
   },
   computed: {
@@ -82,22 +93,8 @@ export default {
     toggleAddForm() {
       this.showAddForm = !this.showAddForm;
     },
-    addItem(item) {
-      this.$store.dispatch('addItem', item);
-      this.showAddForm = false;
-    },
-    removeItem(itemId) {
-      this.$store.dispatch('removeItem', itemId);
-    },
-    setEditItem(item) {
-      this.editingItem = { ...item };
-    },
-    saveItem(updatedItem) {
-      this.$store.dispatch('editItem', updatedItem);
-      this.editingItem = null;
-    },
-    toggleFilterDropdown() {
-      this.showFilterDropdown = !this.showFilterDropdown;
+    toggleEditForm() {
+      this.showEditForm = !this.showEditForm;
     },
     filterItems() {
       let filtered = this.items;
@@ -113,29 +110,36 @@ export default {
       }
 
       this.filteredItemsList = filtered;
-
-      // Close the dropdown after filtering
-      this.showFilterDropdown = false;
     },
-
-    // Close the dropdown when clicking outside
-    closeFilterDropdown(event) {
-      const dropdown = this.$refs.filterDropdown;
-      if (dropdown && !dropdown.contains(event.target)) {
-        this.showFilterDropdown = false;
+    editItem(item) {
+      this.selectedItem = item;
+      this.showEditForm = true; // Show the Edit Form
+    },
+    updateItem(updatedItem) {
+      const index = this.items.findIndex(item => item.id === updatedItem.id);
+      if (index !== -1) {
+        this.$store.dispatch('updateItem', updatedItem); // Dispatch update action
+        this.toggleEditForm(); // Close the form after updating
+        this.filterItems(); // Reapply filtering after update
       }
+    },
+    removeItem(itemId) {
+      this.$store.dispatch('removeItem', itemId); // Dispatch remove action
+      this.filterItems(); // Reapply filtering after removal
+    },
+    addItem(item) {
+      this.$store.dispatch('addItem', item); // Dispatch add action
+      this.toggleAddForm(); // Close the form after adding
     }
   },
   created() {
     this.filterItems();  // Filter the items initially
-    // Add event listener to close dropdown if clicked outside
-    document.addEventListener('click', this.closeFilterDropdown);
   },
-  beforeDestroy() {
-    // Clean up event listener when the component is destroyed
-    document.removeEventListener('click', this.closeFilterDropdown);
+  watch: {
+    searchTerm: 'filterItems',
+    selectedStatus: 'filterItems'
   }
-}
+};
 </script>
 
 

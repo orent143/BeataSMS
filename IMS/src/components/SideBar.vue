@@ -68,6 +68,7 @@ export default {
           ],
           isOpen: false // Keep track of the submenu's open state
         },
+        { name: 'Sales', path: '/sales', icon: 'fas fa-cash-register' },
         { name: 'Suppliers', path: '/suppliers', icon: 'fas fa-truck' },
         { name: 'Categories', path: '/category', icon: 'fas fa-th-list' },
         { name: 'Reports', path: '/reports', icon: 'fas fa-chart-line' }
@@ -95,9 +96,9 @@ export default {
 }
 
 .sidebar-logo {
-  width: 42%; /* Adjust size as needed */
-  height: auto; /* Maintain aspect ratio */
-  margin: 0 auto; /* Center the logo */
+  width: 42%;
+  height: auto; 
+  margin: 0 auto; 
   display: block; /* Ensure it's a block element */
 }
 
