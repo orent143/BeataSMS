@@ -47,9 +47,15 @@
         </router-link>
       </li>
     </ul>
+
+    <!-- Logout link at the bottom (positioned as a footer) -->
+    <div class="sidebar-footer">
+      <router-link to="/login" class="sidebar-link" @click="logout">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </router-link>
+    </div>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -78,14 +84,21 @@ export default {
   methods: {
     toggleSubmenu(link) {
       link.isOpen = !link.isOpen;
+    },
+    logout() {
+      // Perform the logout action, e.g., clear session, token, etc.
+      console.log("Logging out...");
+      // Example: Redirect to login page or clear the session:
+      // this.$router.push('/login');
     }
   }
 };
 </script>
-
-
 <style scoped>
 .sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Ensures content is spread out */
   width: 200px; /* Default width */
   padding: 20px;
   background-color: #FF32BA;
@@ -131,6 +144,7 @@ export default {
 .sidebar-list {
   list-style-type: none; /* Remove bullet points */
   padding: 0; /* Remove default padding */
+  margin-bottom: auto; /* Push content up to top */
 }
 
 .sidebar-link {
@@ -179,5 +193,33 @@ export default {
 /* Add specific style for the collapsed sidebar links */
 .collapsed .sidebar-link {
   justify-content: center; /* Center the icon when collapsed */
+}
+
+/* Style for the logout link at the bottom */
+.sidebar-footer {
+  width: 100%; /* Full width */
+  display: flex;
+  justify-content: left; /* Center the logout link */
+  padding: 0; /* Remove extra padding */
+  margin-top: auto; /* Push the footer to the bottom */
+}
+
+.sidebar-footer .sidebar-link {
+  color: white;
+  font-size: 17px;
+  font-family: 'Arial', sans-serif;
+  padding: 10px 20px;
+  border-radius: 25px;
+  margin-top: 15px; /* Space between links and logout button */
+  display: flex;
+  align-items: left;
+}
+
+.sidebar-footer .sidebar-link i {
+  margin-right: 18px; /* Space between icon and text */
+}
+
+.sidebar-footer .sidebar-link:hover {
+  color: #000000; /* Change link color on hover */
 }
 </style>
