@@ -25,15 +25,6 @@
           <input v-model="newSupplier.email" id="email" type="text" placeholder="Email" required />
         </div>
   
-        <!-- Third Row (Centered Status) -->
-        <div class="form-group status-group">
-          <label for="status">Status:</label>
-          <select v-model="newSupplier.status" id="status" required>
-            <option value="In Stock">In Stock</option>
-            <option value="Low Stock">Low Stock</option>
-            <option value="Out of Stock">Out of Stock</option>
-          </select>
-        </div>
   
         <!-- Form Actions (aligned with status) -->
         <div class="form-actions">
@@ -55,7 +46,6 @@ export default {
         category: '',
         contacts: '',
         email: '',
-        status: 'In Stock' // Default status
       }
     };
   },
@@ -65,7 +55,7 @@ export default {
     },
     submitForm() {
       this.$emit('add', { ...this.newSupplier }); // Emit new item data to parent
-      this.newSupplier = { name: '', category: '', contacts: '', email: '', status: 'In Stock' }; // Reset form
+      this.newSupplier = { name: '', category: '', contacts: '', email: ''}; // Reset form
     }
   }
 };
@@ -118,11 +108,7 @@ export default {
   .form-group {
     width: 100%; /* Ensure form elements fill the available space */
   }
-  
-  .status-group {
-    grid-column: span 2; /* Span both columns to center the status */
-    text-align: center; /* Center the status field */
-  }
+
   
   label {
     font-weight: 600;
