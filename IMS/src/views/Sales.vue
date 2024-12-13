@@ -51,9 +51,9 @@
         <tr v-for="sale in filteredItems" :key="sale.id">
           <td>{{ sale.name }}</td>
           <td>{{ sale.quantity }}</td>
-          <td>${{ sale.unitPrice.toFixed(2) }}</td>
+          <td>₱{{ sale.unitPrice.toFixed(2) }}</td>
           <td>{{ sale.itemsSold }}</td>
-          <td>${{ sale.remitted.toFixed(2) }}</td>
+          <td>₱{{ sale.remitted.toFixed(2) }}</td>
           <td>{{ sale.itemLeft }}</td>
           <td>{{ sale.status }}</td>
         </tr>
@@ -69,7 +69,7 @@
     </div>
     <div class="totals-item">
       <span>Total Sales:</span>
-      <span>${{ totalSales.toFixed(2) }}</span>
+      <span>₱{{ totalSales.toFixed(2) }}</span>
     </div>
   </div>
 </div>

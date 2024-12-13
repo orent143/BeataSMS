@@ -55,7 +55,7 @@
             <tr v-for="product in filteredItems" :key="product.id">
               <td>{{ product.name }}</td>
               <td>{{ product.quantity }}</td>
-              <td>${{ product.unitPrice }}</td>
+              <td>₱{{ product.unitPrice }}</td> <!-- Change to peso symbol -->
               <td>{{ product.category }}</td>
               <td>{{ product.supplier }}</td>
               <td>{{ product.status }}</td>
@@ -96,6 +96,7 @@
     />
   </div>
 </template>
+
 
 <script>
 import AddProduct from '@/components/AddProduct.vue';

@@ -48,19 +48,20 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="ingredient in filteredItems" :key="ingredient.id">
-              <td>{{ ingredient.name }}</td>
-              <td>{{ ingredient.quantity }}</td>
-              <td>${{ ingredient.costPrice }}</td>
-              <td>{{ ingredient.supplier }}</td>
-              <td>{{ ingredient.status }}</td>
-              <td>
-                <!-- Action buttons -->
-                <button class="action-btn" @click="editItem(ingredient)">Edit</button>
-                <button class="action-btn" @click="removeItem(ingredient.id)">Remove</button>
-              </td>
-            </tr>
-          </tbody>
+  <tr v-for="ingredient in filteredItems" :key="ingredient.id">
+    <td>{{ ingredient.name }}</td>
+    <td>{{ ingredient.quantity }}</td>
+    <td>₱{{ ingredient.costPrice }}</td> <!-- Changed $ to ₱ -->
+    <td>{{ ingredient.supplier }}</td>
+    <td>{{ ingredient.status }}</td>
+    <td>
+      <!-- Action buttons -->
+      <button class="action-btn" @click="editItem(ingredient)">Edit</button>
+      <button class="action-btn" @click="removeItem(ingredient.id)">Remove</button>
+    </td>
+  </tr>
+</tbody>
+
         </table>
        <!-- Floating Button and Popout Options -->
        <div class="floating-btn-container">
