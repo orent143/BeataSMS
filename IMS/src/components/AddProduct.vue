@@ -17,8 +17,8 @@
 
       <!-- Second Row -->
       <div class="form-group">
-        <label for="costPrice">Cost Price</label>
-        <input id="costPrice" v-model="costPrice" type="number" placeholder="Cost Price" required min="0" step="0.01" />
+        <label for="unitPrice">Unit Price</label>
+        <input id="unitPrice" v-model="unitPrice" type="number" placeholder="Unit Price" required min="0" step="0.01" />
       </div>
       <div class="form-group">
         <label for="category">Category</label>
@@ -67,7 +67,7 @@ export default {
     return {
       name: '',
       quantity: 0,
-      costPrice: 0,
+      unitPrice: 0,
       category: '',
       supplier: '',
       status: 'In Stock' // Default status
@@ -81,7 +81,7 @@ export default {
     resetForm() {
       this.name = '';
       this.quantity = 0;
-      this.costPrice = 0;
+      this.unitPrice = 0;
       this.category = '';
       this.supplier = '';
       this.status = 'In Stock';
@@ -91,7 +91,7 @@ export default {
         id: Date.now(),
         name: this.name,
         quantity: this.quantity,
-        costPrice: this.costPrice,
+        unitPrice: this.unitPrice,
         category: this.category,
         supplier: this.supplier,
         status: this.status

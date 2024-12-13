@@ -3,24 +3,24 @@
     <div class="header-container">
       <h1 class="products-header">Product List</h1>
       <div class="header-actions">
+        <!-- Search Bar -->
         <div class="search-container">
           <input
             type="text"
             v-model="searchTerm"
             placeholder="Search"
             class="search-bar"
+            @input="filterItems"
           />
           <i class="fas fa-search search-icon"></i>
         </div>
 
-        <!-- Filter Button with dropdown for status -->
+        <!-- Filter Dropdown -->
         <div class="filter-container">
           <button class="filter-btn" @click="toggleFilterDropdown">
             <i class="fas fa-filter"></i>
           </button>
-          <!-- Dropdown for status filter, shown when showFilterDropdown is true -->
           <div v-if="showFilterDropdown" class="dropdown">
-            <!-- Status Filter Dropdown -->
             <select v-model="selectedStatus" class="filter-select" @change="filterItems">
               <option value="">All Statuses</option>
               <option value="In Stock">In Stock</option>
@@ -30,47 +30,70 @@
           </div>
         </div>
 
-        <!-- Add Product Button -->
+        <!-- Add Stock Button -->
         <button @click="toggleAddForm" class="add-product-btn">Add</button>
       </div>
     </div>
 
     <div class="main-content">
       <div class="inventory-container">
-        <!-- AddItem Form -->
-        <AddItem v-if="showAddForm" @add="addItem" :isVisible="showAddForm" @close="toggleAddForm" />
-
-        <!-- Inventory List -->
-        <InventoryList
-          :items="filteredItems"
-          @remove="removeItem"
-          @edit="toggleEditForm"
-        />
-
-        <!-- EditItem Form -->
-        <EditItem
-          v-if="showEditForm"
-          :isVisible="showEditForm"
-          :itemToEdit="selectedItem"
-          @close="toggleEditForm"
-          @update="updateItem"
-        />
+        <table class="stock-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
+              <th>Category</th>
+              <th>Supplier</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="product in filteredItems" :key="product.id">
+              <td>{{ product.name }}</td>
+              <td>{{ product.quantity }}</td>
+              <td>${{ product.unitPrice }}</td>
+              <td>{{ product.category }}</td>
+              <td>{{ product.supplier }}</td>
+              <td>{{ product.status }}</td>
+              <td>
+                <button class="action-btn" @click="editItem(product)">Edit</button>
+                <button class="action-btn" @click="removeItem(product.id)">Remove</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+
+    <!-- Add or Edit Item Form -->
+    <add-product
+      v-if="showAddForm"
+      :isVisible="showAddForm"
+      @close="toggleAddForm"
+      @add="addItem"
+    />
+
+    <!-- Edit Item Form -->
+    <edit-product
+      v-if="showEditForm"
+      :isVisible="showEditForm"
+      :itemToEdit="selectedItem"
+      @close="toggleEditForm"
+      @update="updateItem"
+    />
   </div>
 </template>
 
 <script>
-import AddItem from '@/components/AddItem.vue';
-import InventoryList from '@/components/InventoryList.vue';
-import EditItem from '@/components/EditItem.vue'; // Import the EditItem component
-import { mapState } from 'vuex';
+import AddProduct from '@/components/AddProduct.vue';
+import EditProduct from '@/components/EditProduct.vue';
 
 export default {
   components: {
-    AddItem,
-    InventoryList,
-    EditItem
+    AddProduct,
+    EditProduct
   },
   data() {
     return {
@@ -80,16 +103,23 @@ export default {
       showAddForm: false,
       showEditForm: false,
       selectedItem: null, // Store the item to be edited
-      filteredItemsList: [] // Store filtered items
+      productItems: [
+        { id: 1, name: "Espresso", quantity: 50, unitPrice: 60, category: "Beverages", supplier: "Coffee Co.", status: "In Stock" },
+        { id: 2, name: "Cappuccino", quantity: 30, unitPrice: 50, category: "Beverages", supplier: "Coffee Co.", status: "In Stock" },
+        { id: 3, name: "Croissant", quantity: 20, unitPrice: 50, category: "Bakery", supplier: "Bakery Inc.", status: "Low Stock" },
+        { id: 4, name: "Bagel", quantity: 15, unitPrice: 20, category: "Bakery", supplier: "Bakery Inc.", status: "In Stock" },
+        { id: 5, name: "Lemonade", quantity: 25, unitPrice: 75, category: "Beverages", supplier: "Beverage Co.", status: "In Stock" },
+        { id: 6, name: "Cheese Sandwich", quantity: 10, unitPrice: 60, category: "Food", supplier: "Deli Foods", status: "Out of Stock" },
+        { id: 7, name: "Cheese Sandwich", quantity: 10, unitPrice: 60, category: "Food", supplier: "Deli Foods", status: "Out of Stock" },
+        // More items...
+      ],
+      filteredItems: []
     };
   },
-  computed: {
-    ...mapState(['items']),
-    filteredItems() {
-      return this.filteredItemsList;
-    }
-  },
   methods: {
+    toggleFilterDropdown() {
+      this.showFilterDropdown = !this.showFilterDropdown;
+    },
     toggleAddForm() {
       this.showAddForm = !this.showAddForm;
     },
@@ -97,7 +127,7 @@ export default {
       this.showEditForm = !this.showEditForm;
     },
     filterItems() {
-      let filtered = this.items;
+      let filtered = this.productItems;
 
       if (this.searchTerm) {
         filtered = filtered.filter(item =>
@@ -109,31 +139,33 @@ export default {
         filtered = filtered.filter(item => item.status === this.selectedStatus);
       }
 
-      this.filteredItemsList = filtered;
+      this.filteredItems = filtered;
     },
     editItem(item) {
       this.selectedItem = item;
-      this.showEditForm = true; // Show the Edit Form
+      this.showEditForm = true;
     },
     updateItem(updatedItem) {
-      const index = this.items.findIndex(item => item.id === updatedItem.id);
+      const index = this.productItems.findIndex(item => item.id === updatedItem.id);
       if (index !== -1) {
-        this.$store.dispatch('updateItem', updatedItem); // Dispatch update action
-        this.toggleEditForm(); // Close the form after updating
-        this.filterItems(); // Reapply filtering after update
+        this.productItems.splice(index, 1, updatedItem);
       }
+      this.filterItems();
+      this.toggleEditForm();
     },
     removeItem(itemId) {
-      this.$store.dispatch('removeItem', itemId); // Dispatch remove action
-      this.filterItems(); // Reapply filtering after removal
+      this.productItems = this.productItems.filter(item => item.id !== itemId);
+      this.filterItems();
     },
-    addItem(item) {
-      this.$store.dispatch('addItem', item); // Dispatch add action
-      this.toggleAddForm(); // Close the form after adding
+    addItem(newItem) {
+      newItem.id = this.productItems.length + 1;
+      this.productItems.push(newItem);
+      this.filterItems();
+      this.toggleAddForm();
     }
   },
   created() {
-    this.filterItems();  // Filter the items initially
+    this.filterItems();
   },
   watch: {
     searchTerm: 'filterItems',
@@ -141,17 +173,17 @@ export default {
   }
 };
 </script>
-
-
-<style scoped>
-.app-container {
+  
+  
+  <style scoped>
+  /* Use same styles as Inventory page */
+  .app-container {
   display: flex;
   flex-direction: column;
-  width: 80dvw;
-  max-width: 80dvw;
+  width: 80vw;
+  max-width: 80vw;
   margin-left: 40px;
 }
-
 .header-container {
   display: flex;
   align-items: center;
@@ -167,44 +199,95 @@ export default {
   font-weight: 900;
 }
 
+
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 10px; /* Add space between header actions */
+  gap: 10px;
 }
 
 .main-content {
-  display: flex; /* Use flexbox for layout */
-  padding: 4px; /* Padding around the main content */
+    display: flex;
+    padding: 4px;
+  }
+  
+  .inventory-container {
+  flex-grow: 1;
+  height: 40vw;
+  background-color: #dfdfdf;
+  border-radius: 25px;
+  overflow-y: auto;
+  margin-left: 5px;
+  padding: 0;
+}
+  
+  /* Styling for the stock table */
+  .stock-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .stock-table th,
+  .stock-table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .stock-table tbody{
+    font-family: 'Arial', sans-serif;
+  font-size: 15px;
+  }
+
+  .stock-table th {
+    background-color: #f4f4f4;
+    padding: 13px;
+    font-weight: bold;
+  }
+ 
+  .search-container {
+  position: relative;
+  margin-right: 3px;
 }
 
-.inventory-container {
-  flex-grow: 1; /* Allow it to fill available space */
-  height: 40dvw; /* Adjust height */
-  background-color: #dfdfdf; /* Background color */
-  border-radius: 25px; /* Maintain border radius */
-  overflow-y: auto; /* Enable scrolling if content overflows */
-  margin-left: 5px; /* Space between the sidebar and inventory container */
-  padding: 0; /* No padding */
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #333;
+  pointer-events: none;
+}
+
+.search-bar {
+  padding: 8px 30px 8px 8px;
+  border: 1px solid #94949400;
+  border-radius: 10px;
+  width: 130px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  background-color: #D9D9D9;
 }
 
 .filter-btn {
-  padding: 8px; /* Adjust padding */
-  background-color: transparent; /* Transparent background */
-  border: none; /* No border */
-  cursor: pointer; /* Pointer cursor */
+  padding: 8px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
   font-size: 19px;
-  color: #333; /* Icon color */
-  transition: color 0.3s; /* Smooth transition for hover */
+  color: #333;
+  transition: color 0.3s;
 }
 
 .filter-container {
-  position: relative; /* Ensures the dropdown can be positioned inside */
+  position: relative;
 }
 
 .dropdown {
   position: absolute;
-  top: 35px; /* Align the dropdown just below the button */
+  top: 35px;
   left: 0;
   background-color: white;
   border: 1px solid #ccc;
@@ -212,7 +295,7 @@ export default {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   padding: 10px;
   z-index: 10;
-  width: 8dvw; /* Width for dropdown */
+  width: 8dvw;
 }
 
 .filter-select {
@@ -223,47 +306,43 @@ export default {
   margin-bottom: 10px;
 }
 
-.search-container {
-  position: relative; /* Set position relative for the icon */
-  margin-right: 3px; /* Space between search and button */
-}
-
-.search-icon {
-  position: absolute; /* Position absolute to place it inside the input */
-  right: 10px; /* Position it on the right */
-  top: 50%; /* Center vertically */
-  transform: translateY(-50%); /* Adjust for vertical centering */
-  color: #333; /* Icon color */
-  pointer-events: none; /* Prevent clicks on the icon */
-}
-
-.search-bar {
-  padding: 8px 30px 8px 8px; /* Add right padding for icon space */
-  border: 1px solid #94949400;
-  border-radius: 10px;
-  width: 130px;
-  font-size: 14px; /* Adjust font size */
-  font-weight: bold; /* Adjust font weight */
-  color: #333; /* Change font color */
-  background-color: #D9D9D9; /* Change background color */
-}
-
 .add-product-btn {
   padding: 8px 12px;
-  background-color: #01A501; /* Button background */
+  background-color: #01A501;
   color: rgb(0, 0, 0);
   border: none;
   border-radius: 10px;
   width: 70px;
   cursor: pointer;
-  font-size: 14px; /* Adjust font size */
-  font-family: 'Arial', sans-serif; /* Change font family */
-  font-weight: bold; /* Make font bold */
-  text-align: center; /* Center the text */
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .add-product-btn:hover {
   background-color: #00b32dad;
- /* Darker on hover */
 }
-</style>
+/* Add a gap between the action buttons */
+.action-btn {
+  padding: 6px 9px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Arial', sans-serif;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  margin-right: 10px;
+}
+
+.action-btn:hover {
+  background-color: #0056b3;
+}
+
+.action-btn:active {  
+  background-color: #004080;
+}
+
+  </style>
+  
