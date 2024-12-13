@@ -70,7 +70,7 @@ export default {
       unitPrice: 0,
       category: '',
       supplier: '',
-      status: 'In Stock' // Default status
+      status: 'In Stock' 
     };
   },
   methods: {
@@ -96,8 +96,8 @@ export default {
         supplier: this.supplier,
         status: this.status
       };
-      this.$emit('add', newItem); // Emit the new item to parent component
-      this.closeForm(); // Close the form after submission
+      this.$emit('add', newItem); 
+      this.closeForm(); 
     }
   }
 };

@@ -20,14 +20,29 @@
     </div>
 
     <div class="main-content">
-      <div class="category-list">
-        <AddCategory v-if="showAddForm" @add="addCategory" :isVisible="showAddForm" @close="toggleAddForm" />
+      <!-- Add Category Form -->
+      <AddCategory 
+        v-if="showAddForm" 
+        @add="addCategory" 
+        :isVisible="showAddForm" 
+        @close="toggleAddForm"
+        class="add-category-form" 
+      />
 
+      <div class="category-list">
         <!-- Categories Grid -->
         <div v-for="category in filteredCategories" :key="category.id" class="category-card">
           <h3>{{ category.name }}</h3>
-          <button @click="setEditCategory(category)">Edit</button>
-          <button @click="removeCategory(category.id)">Remove</button>
+          
+          <!-- Action Buttons -->
+          <div class="category-actions">
+            <button @click="setEditCategory(category)" class="action-btn edit-btn">
+              <i class="fas fa-pencil-alt"></i> <!-- Pencil icon for edit -->
+            </button>
+            <button @click="removeCategory(category.id)" class="action-btn remove-btn">
+              <i class="fas fa-trash"></i> <!-- Trash icon for remove -->
+            </button>
+          </div>
         </div>
       </div>
 
@@ -131,30 +146,51 @@ export default {
 
 .category-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(2, 1fr); /* 2 columns layout */
   gap: 20px;
 }
 
 .category-card {
-  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color:#dfdfdf;
   padding: 15px;
+  height: 230px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+  position: relative;
 }
 
-.category-card button {
-  padding: 6px 12px;
-  margin-top: 10px;
-  background-color: #01a501;
-  color: white;
+.category-card h3 {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.category-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.action-btn {
+  padding: 8px;
+  background-color: transparent;
+  color: #333;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
+  font-size: 18px;
+  margin: 0 5px;
 }
 
-.category-card button:hover {
-  background-color: #00b32d;
+.action-btn:hover {
+  color: #FF32BA;
+}
+
+.edit-btn i, .remove-btn i {
+  font-size: 20px;
 }
 
 .search-container {
@@ -197,4 +233,7 @@ export default {
 .add-product-btn:hover {
   background-color: #00b32dad;
 }
+
+
+
 </style>
