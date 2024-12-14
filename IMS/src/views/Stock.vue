@@ -62,6 +62,14 @@
             </tr>
           </tbody>
         </table>
+       <!-- Floating Button and Popout Options -->
+       <div class="floating-btn-container">
+          <button class="floating-btn" @click="togglePopoutOptions">+</button>
+          <div v-if="showPopoutOptions" class="popout-options">
+            <button class="popout-option" @click="addLowStock">Add Low Stock</button>
+            <button class="popout-option" @click="addSummary">Add Summary</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -100,6 +108,7 @@ export default {
       showFilterDropdown: false,
       showAddForm: false,
       showEditForm: false,
+      showPopoutOptions: false, // Controls the visibility of popout options
       selectedItem: null, // Store the item to be edited
       stockItems: [
         { id: 1, name: 'Coffee Beans', quantity: 50, costPrice: 5, status: 'In Stock', supplier: 'Coffee Co.' },
@@ -130,6 +139,9 @@ export default {
     },
     toggleEditForm() {
       this.showEditForm = !this.showEditForm;
+    },
+    togglePopoutOptions() {
+      this.showPopoutOptions = !this.showPopoutOptions;
     },
     filterItems() {
       let filtered = this.stockItems;
@@ -167,6 +179,14 @@ export default {
       this.stockItems.push(newItem);
       this.filterItems();
       this.toggleAddForm(); // Close the add form
+    },
+    addLowStock() {
+      console.log("Add Low Stock clicked");
+      // Handle adding low stock logic
+    },
+    addSummary() {
+      console.log("Add Summary clicked");
+      // Handle adding summary logic
     }
   },
   created() {
@@ -217,6 +237,7 @@ export default {
   }
   
   .inventory-container {
+  position: relative;
   flex-grow: 1;
   height: 40vw;
   background-color: #dfdfdf;
@@ -348,6 +369,64 @@ export default {
 .action-btn:active {
   background-color: #004080;
 }
+.floating-btn-container {
+  position: fixed; /* Change from absolute to fixed */
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 10; /* Ensure it's above other content */
+}
 
+.floating-btn {
+  width: 35px;
+  height: 35px;
+  background-color: #4CAF50;
+  color: #0000009d;
+  border: none;
+  border-radius: 50%;
+  font-size: 19px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-btn:hover {
+  background-color: #FF32BA;
+}
+
+/* Popout Options */
+.popout-options {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: absolute;
+  bottom: 0;
+  right: 40px;
+}
+
+.popout-option {
+  background-color: #FFFFFF;
+  color: rgb(34, 34, 34);
+  padding: 10px;
+  margin: 5px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 10px;
+  width: 100px;
+}
+
+.popout-option:hover {
+  background-color: #FF32BA;
+}
+
+.popout-option:active {
+  background-color: #004080;
+}
   </style>
   

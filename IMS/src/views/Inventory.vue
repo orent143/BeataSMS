@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <!-- Header Section -->
     <div class="header-container">
       <h1 class="products-header">Product List</h1>
       <div class="header-actions">
@@ -35,6 +36,7 @@
       </div>
     </div>
 
+    <!-- Main Content Section -->
     <div class="main-content">
       <div class="inventory-container">
         <table class="stock-table">
@@ -64,6 +66,15 @@
             </tr>
           </tbody>
         </table>
+        
+        <!-- Floating Button and Popout Options -->
+        <div class="floating-btn-container">
+          <button class="floating-btn" @click="togglePopoutOptions">+</button>
+          <div v-if="showPopoutOptions" class="popout-options">
+            <button class="popout-option" @click="addLowStock">Add Low Stock</button>
+            <button class="popout-option" @click="addSummary">Add Summary</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -102,7 +113,8 @@ export default {
       showFilterDropdown: false,
       showAddForm: false,
       showEditForm: false,
-      selectedItem: null, // Store the item to be edited
+      showPopoutOptions: false, // Controls the visibility of popout options
+      selectedItem: null,
       productItems: [
         { id: 1, name: "Espresso", quantity: 50, unitPrice: 60, category: "Beverages", supplier: "Coffee Co.", status: "In Stock" },
         { id: 2, name: "Cappuccino", quantity: 30, unitPrice: 50, category: "Beverages", supplier: "Coffee Co.", status: "In Stock" },
@@ -125,6 +137,9 @@ export default {
     },
     toggleEditForm() {
       this.showEditForm = !this.showEditForm;
+    },
+    togglePopoutOptions() {
+      this.showPopoutOptions = !this.showPopoutOptions;
     },
     filterItems() {
       let filtered = this.productItems;
@@ -162,6 +177,14 @@ export default {
       this.productItems.push(newItem);
       this.filterItems();
       this.toggleAddForm();
+    },
+    addLowStock() {
+      console.log("Add Low Stock clicked");
+      // Handle adding low stock logic
+    },
+    addSummary() {
+      console.log("Add Summary clicked");
+      // Handle adding summary logic
     }
   },
   created() {
@@ -173,17 +196,17 @@ export default {
   }
 };
 </script>
-  
-  
-  <style scoped>
-  /* Use same styles as Inventory page */
-  .app-container {
+
+<style scoped>
+/* General Styling */
+.app-container {
   display: flex;
   flex-direction: column;
   width: 80vw;
   max-width: 80vw;
   margin-left: 40px;
 }
+
 .header-container {
   display: flex;
   align-items: center;
@@ -199,19 +222,20 @@ export default {
   font-weight: 900;
 }
 
-
 .header-actions {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
+/* Main Content */
 .main-content {
-    display: flex;
-    padding: 4px;
-  }
-  
-  .inventory-container {
+  display: flex;
+  padding: 4px;
+}
+
+.inventory-container {
+  position: relative;
   flex-grow: 1;
   height: 40vw;
   background-color: #dfdfdf;
@@ -220,33 +244,35 @@ export default {
   margin-left: 5px;
   padding: 0;
 }
-  
-  /* Styling for the stock table */
-  .stock-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .stock-table th,
-  .stock-table td {
-    padding: 10px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-  }
-  .stock-table tbody{
-    font-family: 'Arial', sans-serif;
-  font-size: 15px;
-  }
 
-  .stock-table th {
-    background-color: #f4f4f4;
-    padding: 13px;
-    font-weight: bold;
-  }
- 
-  .search-container {
+/* Stock Table Styling */
+.stock-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.stock-table th,
+.stock-table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.stock-table tbody {
+  font-family: 'Arial', sans-serif;
+  font-size: 15px;
+}
+
+.stock-table th {
+  background-color: #f4f4f4;
+  padding: 13px;
+  font-weight: bold;
+}
+
+/* Search Bar */
+.search-container {
   position: relative;
   margin-right: 3px;
 }
@@ -271,6 +297,7 @@ export default {
   background-color: #D9D9D9;
 }
 
+/* Filter Button */
 .filter-btn {
   padding: 8px;
   background-color: transparent;
@@ -306,6 +333,7 @@ export default {
   margin-bottom: 10px;
 }
 
+/* Add Product Button */
 .add-product-btn {
   padding: 8px 12px;
   background-color: #01A501;
@@ -321,7 +349,8 @@ export default {
 .add-product-btn:hover {
   background-color: #00b32dad;
 }
-/* Add a gap between the action buttons */
+
+/* Action Buttons */
 .action-btn {
   padding: 6px 9px;
   background-color: #007bff;
@@ -340,9 +369,67 @@ export default {
   background-color: #0056b3;
 }
 
-.action-btn:active {  
+.action-btn:active {
   background-color: #004080;
 }
 
-  </style>
-  
+.floating-btn-container {
+  position: fixed; /* Change from absolute to fixed */
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 10; /* Ensure it's above other content */
+}
+
+.floating-btn {
+  width: 35px;
+  height: 35px;
+  background-color: #4CAF50;
+  color: #0000009d;
+  border: none;
+  border-radius: 50%;
+  font-size: 19px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-btn:hover {
+  background-color: #FF32BA;
+}
+
+/* Popout Options */
+.popout-options {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: absolute;
+  bottom: 0;
+  right: 40px;
+}
+
+.popout-option {
+  background-color: #FFFFFF;
+  color: rgb(34, 34, 34);
+  padding: 10px;
+  margin: 5px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 10px;
+  width: 100px;
+}
+
+.popout-option:hover {
+  background-color: #FF32BA;
+}
+
+.popout-option:active {
+  background-color: #004080;
+}
+</style>
