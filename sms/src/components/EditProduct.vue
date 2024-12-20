@@ -1,32 +1,28 @@
 <template>
     <div class="popout-form" v-if="isVisible">
       <div class="form-header">
-        <h2>Edit Supplier</h2>
+        <h2>Edit Product</h2>
         <button @click="closeForm" class="close-btn">x</button>
       </div>
       <form @submit.prevent="submitForm" class="form-container">
-        <!-- Form fields, same as AddStock but prefilled -->
         <div class="form-group">
           <label for="name">Name:</label>
-          <input v-model="editedSupplier.name" id="name" type="text" placeholder="Item Name" required />
+          <input v-model="editedItem.name" id="name" type="text" placeholder="Product Name" required />
         </div>
         <div class="form-group">
-          <label for="category">Category:</label>
-          <input v-model="editedSupplier.category" id="category" type="text" placeholder="Category" required />
-        </div>
-  
-        <div class="form-group">
-          <label for="contacts">Contacts:</label>
-          <input v-model="editedSupplier.contacts"  id="contacts" type="number" placeholder="Contacts" required min="0" step="0.01" />
+          <label for="quantity">Quantity:</label>
+          <input v-model="editedItem.quantity" id="quantity" type="number" placeholder="Quantity" required min="1" />
         </div>
         <div class="form-group">
-          <label for="email">Email:</label>
-          <input v-model="editedSupplier.email"  id="email" type="text" placeholder="Email" required />
+          <label for="unitPrice">Unit Price:</label>
+          <input v-model="editedItem.unitPrice" id="unitPrice" type="number" placeholder="Unit Price" required min="0" step="0.01" />
         </div>
-
-  
+        <div class="form-group">
+          <label for="supplier">Supplier:</label>
+          <input v-model="editedItem.supplier" id="supplier" placeholder="Supplier" required />
+        </div>
         <div class="form-actions">
-          <button type="submit" class="add-item-btn">Update Supplier</button>
+          <button type="submit" class="add-item-btn">Update Product</button>
         </div>
       </form>
     </div>
@@ -40,7 +36,7 @@
     },
     data() {
       return {
-        editedSupplier: { ...this.itemToEdit } // Initialize with the item to edit
+        editedItem: { ...this.itemToEdit }
       };
     },
     methods: {
@@ -48,16 +44,14 @@
         this.$emit('close');
       },
       submitForm() {
-        this.$emit('update', this.editedSupplier); // Emit updated item to parent
-        this.closeForm(); // Close the form after submitting
+        this.$emit('update', this.editedItem); 
+        this.closeForm();
       }
     }
   };
   </script>
-  
-  
+   
   <style scoped>
-  /* Styling similar to the AddStock.vue */
   .popout-form {
     background-color: #ffffff;
     padding: 20px;
@@ -100,7 +94,7 @@
   .form-group {
     width: 100%;
   }
-
+  
   label {
     font-weight: 600;
     font-size: 14px;
@@ -116,12 +110,12 @@
   }
   .form-actions {
   display: flex;
-  justify-content: center; /* Center the button */
+  justify-content: center; 
   width: 100%;
-  margin-top: 10px; /* Adjusted margin for better alignment */
-  grid-column: span 2; /* Span across both columns to align with status */
-}
-.add-item-btn {
+  margin-top: 10px;
+  grid-column: span 2; 
+  }
+  .add-item-btn {
   padding: 10px 20px;
   background-color: #01a501f8;
   color: rgb(0, 0, 0);
@@ -131,14 +125,14 @@
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-
-.add-item-btn:hover {
+  }
+  
+  .add-item-btn:hover {
   background-color: #00b32d;
-}
-
-.add-item-btn:focus {
+  }
+  
+  .add-item-btn:focus {
   outline: none;
-}
-
-</style>
+  }
+  
+  </style>
