@@ -27,6 +27,11 @@
           <span>₱{{ totalAmount }}</span>
         </div>
       </div>
+
+      <!-- Payment Method Section -->
+      <div class="payment-method">
+        <span><strong>Payment Method:</strong> {{ paymentMethod }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -44,6 +49,10 @@ export default {
       type: Array,
       required: true,
       default: () => []
+    },
+    paymentMethod: {
+      type: String,
+      required: true,
     }
   },
   computed: {
@@ -132,5 +141,11 @@ h3 {
   justify-content: space-between;
   padding: 10px 0;
   font-weight: bold;
+}
+
+.payment-method {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #333;
 }
 </style>

@@ -63,7 +63,7 @@ export default {
 
 <style scoped>
 .menu-item-card {
-  background: white;
+  background: #ff32bb2d;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

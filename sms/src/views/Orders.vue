@@ -109,6 +109,54 @@ export default {
             { name: 'Muffin', quantity: 2 }
           ],
           totalAmount: '9.00'
+        },
+        {
+          id: 1003,
+          customerName: 'John Soi',
+          tableNumber: 6,
+          timestamp: new Date(),
+          status: 'pending',
+          items: [
+            { name: 'Cappuccino', quantity: 2 },
+            { name: 'Croissant', quantity: 1 }
+          ],
+          totalAmount: '12.50'
+        },
+        {
+          id: 1004,
+          customerName: 'Patrick Smith',
+          tableNumber: 1,
+          timestamp: new Date(),
+          status: 'preparing',
+          items: [
+            { name: 'Latte', quantity: 1 },
+            { name: 'Muffin', quantity: 2 }
+          ],
+          totalAmount: '9.00'
+        },
+        {
+          id: 1005,
+          customerName: 'John Doe',
+          tableNumber: 7,
+          timestamp: new Date(),
+          status: 'pending',
+          items: [
+            { name: 'Cappuccino', quantity: 2 },
+            { name: 'Croissant', quantity: 1 }
+          ],
+          totalAmount: '12.50'
+        },
+        {
+          id: 1006,
+          customerName: 'Jane Smith',
+          tableNumber: 8,
+          timestamp: new Date(),
+          status: 'preparing',
+          items: [
+            { name: 'Latte', quantity: 1 },
+            { name: 'Muffin', quantity: 2 }
+          ],
+          totalAmount: '9.00'
         }
       ]
     }
@@ -225,8 +273,8 @@ export default {
 }
 
 .status-badge.pending {
-  background-color: #ffd700;
-  color: #000;
+  background-color: #ff4444;
+  color: #ffffff;
 }
 
 .status-badge.preparing {

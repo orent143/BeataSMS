@@ -26,7 +26,7 @@ export default {
 }
 
 .status-badge.pending {
-  background-color: #ffd700;
+  background-color: #ff0000;
   color: #000;
 }
 

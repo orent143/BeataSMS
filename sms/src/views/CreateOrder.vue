@@ -27,11 +27,22 @@
             <label>Table Number</label>
             <input v-model.number="order.tableNumber" type="number" required class="form-input" />
           </div>
+
+          <!-- Payment Method Selection -->
+          <div class="form-group">
+            <label>Payment Method</label>
+            <select v-model="order.paymentMethod" class="form-input">
+              <option value="CASH">Cash</option>
+              <option value="TALLY">Tally</option>
+            </select>
+          </div>
         </div>
 
+        <!-- Pass the payment method to OrderSummary -->
         <OrderSummary 
           :items="order.items"
           :menuItems="menuItems"
+          :paymentMethod="order.paymentMethod" 
         />
 
         <div class="form-actions">
@@ -42,6 +53,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import OrderItemSelector from '@/components/OrderItemSelector.vue'
